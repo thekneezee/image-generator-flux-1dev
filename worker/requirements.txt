@@ -1,0 +1,39 @@
+# Versions are pinned, not ranged. Learned the hard way: an open
+# `diffusers>=0.31` resolved to 0.39.0, which registers a custom torch
+# operator annotated `torch.Tensor | None`. torch 2.4.0's infer_schema()
+# cannot parse that, so `from diffusers import FluxPipeline` raised
+# RuntimeError at import time. Nothing in pip's metadata declares that
+# constraint, so only an actual import test catches it - see the smoke test
+# at the end of the Dockerfile.
+#
+# This set is the diffusers 0.32-era stack that FLUX.1-dev shipped alongside,
+# verified importable against torch 2.4.0.
+
+# torch is intentionally NOT listed: the base image
+# (pytorch/pytorch:2.4.0-cuda12.4-cudnn9-runtime) already ships torch 2.4.0
+# built against CUDA 12.4. Adding it here would trigger a ~3 GB re-download
+# and risk Runpod's 30-minute docker build timeout.
+
+# >=1.10.1 is required: versions 1.7.11-1.10.0 corrupt per-worker job
+# tracking, which funnels every job to a single worker.
+runpod>=1.10.1,<2.0.0
+
+# 0.32.x has FluxPipeline with callback_on_step_end and true_cfg_scale, and
+# predates the attention_dispatch refactor that requires torch >= 2.5.
+diffusers==0.32.2
+
+# Contemporary with diffusers 0.32; provides the T5 and CLIP text encoders.
+transformers==4.48.3
+
+# huggingface_hub 1.x removed APIs that transformers 4.48 still calls.
+huggingface_hub>=0.26.0,<1.0.0
+
+accelerate>=1.0.0,<2.0.0
+safetensors>=0.4.5,<1.0.0
+
+# Required by the T5 tokenizer. Easy to omit, and the failure is an obscure
+# crash at model-load time rather than a missing-package error.
+sentencepiece>=0.2.0
+protobuf>=4.25.0,<6.0.0
+
+Pillow>=10.4.0,<12.0.0

@@ -1,0 +1,42 @@
+# Render blueprint for the FLUX Studio chat UI.
+#
+# This service is a thin client: it holds no model and needs no GPU. Every
+# generation is dispatched to the Runpod Serverless endpoint, where FLUX.1-dev
+# runs on a 48 GB GPU that scales to zero when idle.
+#
+# It exists because the Runpod API key must never reach the browser - Runpod
+# offers no browser-safe key and no per-origin allowlist, so a key in client
+# JavaScript would let anyone spend the account's credit.
+#
+# Deploy: Render dashboard -> New -> Blueprint -> select this repository.
+# Render will prompt for the three values marked `sync: false`; those are
+# secrets and are deliberately not stored in this file.
+
+services:
+  - type: web
+    name: flux-serverless-demo
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r app/requirements.txt
+    startCommand: python app/app.py
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+
+      # Secrets - Render prompts for these at deploy time and stores them
+      # encrypted. They are never committed to the repository.
+      - key: RUNPOD_API_KEY
+        sync: false
+      - key: RUNPOD_ENDPOINT_ID
+        sync: false
+      - key: APP_PASSWORD
+        sync: false
+
+      # Non-secret configuration.
+      - key: RUNPOD_MOCK
+        value: "0"
+      # Per-visitor generation cap, so a shared link cannot drain the credit.
+      - key: MAX_GENERATIONS
+        value: "25"
