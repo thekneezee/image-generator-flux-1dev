@@ -17,7 +17,7 @@ flowchart TD
     R -->|"GET /status/{id} - polled ~1/s"| Q
     R -->|"GET /health - polled every 3s"| Q
 
-    subgraph runpod ["Runpod Serverless - endpoint krkxtzhha50he9"]
+    subgraph runpod ["Runpod Serverless - endpoint 86i54a1r5roefx"]
         Q["Job queue<br/>api.runpod.ai/v2/{id}"] --> W
         W["Worker container<br/>Dockerfile -> worker/handler.py<br/><i>0 to 1 workers, scales to zero</i>"]
     end
