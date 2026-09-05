@@ -15,10 +15,13 @@ nothing.
 > **Pre-warm the GPU** that gets the card ready before you type, if you want to
 > skip that wait.
 
-![Making a picture](docs/media/demo.gif)
+![FLUX Studio, showing a generated picture and its details](docs/media/demo.png)
 
-*A real request going from queued, through 28 rounds of work on a live graphics
-card, to a finished picture.*
+*A real request. The prompt is at the top, the picture the model made is
+underneath it, and below that are the details of how it was made: the seed, the
+time it took, which graphics card ran it, that the model came from RunPod's
+cache, and that it cost just over one cent. The panel on the right is the live
+state of the endpoint, showing five requests completed and none failed.*
 
 ---
 
@@ -225,18 +228,6 @@ to typing.
 
 ---
 
-## Evidence
-
-| | |
-|---|---|
-| ![Progress showing](docs/media/02-denoising.png) | **The progress is real.** `Denoising 14/28 (50%)` comes from the graphics card itself, not from a fake animation in the browser. The panel on the right shows one card running and nothing failed, at that same moment. |
-| ![Finished picture](docs/media/03-result-metadata.png) | **A finished picture with its receipt.** Seed, time taken, which graphics card, where the model came from, and what it cost. |
-| ![RunPod overview](docs/media/04-runpod-overview.png) | **Sitting idle at zero dollars per second**, with no cards running. You can also see the GitHub repository it builds from and the model it uses. |
-| ![RunPod metrics](docs/media/06-runpod-metrics.png) | **23 requests, 23 completed, none failed.** |
-| ![RunPod builds](docs/media/05-runpod-builds.png) | **RunPod builds the container itself** from this repository, so nothing huge is ever uploaded from a laptop. |
-
----
-
 ## Running it yourself
 
 Practice mode needs no password and costs nothing:
@@ -265,7 +256,7 @@ python scripts/local_handler_test.py
 | `worker/` | The code that runs on the graphics card |
 | `app/` | The chat web page |
 | `scripts/` | Tests, and tools for checking and measuring the endpoint |
-| `docs/` | Detailed write ups, screenshots and the demo video |
+| `docs/` | Detailed write ups, the submission PDF and the screenshot |
 | `postman/` | Ready made API requests |
 
 More reading:
