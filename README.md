@@ -110,7 +110,12 @@ a busy data centre does not leave me waiting.
 one, a graphics card would run all day whether used or not, about 42 dollars a
 day. At zero, the card only exists while it is making a picture.
 
-## Sending a request without the web page
+## Using the endpoint directly
+
+The web page is only one way in. The endpoint is an ordinary web address that
+any program can send a request to, which is how I tested it before the page
+existed. A request looks like this, where `curl` is just a command line tool for
+sending web requests:
 
 ```bash
 curl -X POST https://api.runpod.ai/v2/YOUR_ENDPOINT_ID/run \
@@ -140,10 +145,15 @@ curl -X POST https://api.runpod.ai/v2/YOUR_ENDPOINT_ID/run \
 | `scripts` | A script for sending a test request to the endpoint |
 | `docs` | The screenshot |
 
-## Running it yourself
+## Running the page on your own computer
 
-The page has a practice mode that fakes everything, so you can look around
-without any passwords and without spending anything:
+You do not need a RunPod account to look around. The page has a practice mode
+that fakes the AI, so the interface works but no graphics card is used and
+nothing is charged.
+
+Three commands. The first makes a private space for this project's libraries so
+they do not clash with anything else installed. The second installs them from the
+list in `app/requirements.txt`. The third starts the page in practice mode.
 
 ```bash
 python -m venv .venv
@@ -151,13 +161,15 @@ python -m venv .venv
 RUNPOD_MOCK=1 python app/app.py
 ```
 
-For real pictures you need a RunPod account with an endpoint running this
-worker, then set three things before starting the page:
+Then open `http://127.0.0.1:7860` in a browser.
+
+To make real pictures instead, you need your own RunPod endpoint running the code
+in `worker`, and three settings before you start the page:
 
 ```
 RUNPOD_API_KEY       your RunPod key
-RUNPOD_ENDPOINT_ID   the endpoint it should talk to
-APP_PASSWORD         a password for the page
+RUNPOD_ENDPOINT_ID   the endpoint it should send jobs to
+APP_PASSWORD         a password for the page, so it is not open to everyone
 ```
 
 ## Known limits
